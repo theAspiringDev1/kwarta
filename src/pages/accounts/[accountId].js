@@ -22,6 +22,7 @@ import { getLanguage } from 'utils/getLanguage';
 import { useAccountStore } from 'stores/useAccountStore';
 import { useAuthStore } from 'stores/useAuthStore';
 import { useLanguageStore } from 'stores/useLanguageStore';
+import AccountDropdownType from 'components/shared/AccountDropdownType';
 
 const MenuProps = {
     PaperProps: {
@@ -43,6 +44,7 @@ const Page = () => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [currentAccount, setCurrentAccount] = useState('');
+    const [accountType, setAccountType] = useState('');
 
     // STORE
     const updateAccount = useAccountStore((state) => state.updateAccount);
@@ -50,13 +52,15 @@ const Page = () => {
     const accounts = useAccountStore((state) => state.accounts);
     const user_id = useAuthStore((state) => state.authState?.user?.uid);
 
-    console.log(isEditing);
+    // console.log(isEditing);
     const handleSubmit = async (values) => {
         updateAccount(accountId, {
             account_name: values.accountName,
             account_amount: values.accountAmount,
             account_color: selectedColor,
             account_icon: selectedIcon,
+            account_description: values.accountDescription,
+            account_type: accountType,
             user_id
         }).then((success) => {
             if (success) {
@@ -68,6 +72,11 @@ const Page = () => {
         formik.resetForm();
         setSelectedIcon('');
         setSelectedColor('');
+    };
+
+    const handleAccountTypeChange = (e) => {
+        // console.log(e.target.value);
+        setAccountType(e.target.value);
     };
 
     const handleColorClick = (color) => {
@@ -86,7 +95,8 @@ const Page = () => {
 
     const initialValues = {
         accountName: '',
-        accountAmount: ''
+        accountAmount: '',
+        accountDescription: ''
     };
 
     const formik = useFormik({
@@ -109,9 +119,11 @@ const Page = () => {
         setSelectedColor(current.account_color);
 
         setCurrentAccount(current);
+        setAccountType(current.account_type);
 
         formik.setFieldValue('accountAmount', current.account_amount);
         formik.setFieldValue('accountName', current.account_name);
+        formik.setFieldValue('accountDescription', current.account_description);
     }, [accountId]);
 
     if (!currentAccount)
@@ -178,6 +190,27 @@ const Page = () => {
                                 disabled={!isEditing}
                             />
                         </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                            <TextField
+                                id='account-description'
+                                label={'Account Description'}
+                                variant='filled'
+                                fullWidth
+                                multiline
+                                name='accountDescription'
+                                value={formik.values.accountDescription}
+                                onChange={formik.handleChange}
+                                type='number'
+                                disabled={!isEditing}
+                            />
+                        </Box>
+
+                        <AccountDropdownType
+                            accountType={accountType}
+                            handleChange={handleAccountTypeChange}
+                            disabled={!isEditing}
+                        />
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2 }}>
                             <ColorPickerPanel

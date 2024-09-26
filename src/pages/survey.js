@@ -136,7 +136,6 @@ const Page = () => {
 
             {!hasSelectedLanguage ? <LanguageBlock /> : !dataPrivacyAnswer ? <DataPrivacyBlock /> : <SurveyBlock />}
 
-            {}
         </>
     );
 };

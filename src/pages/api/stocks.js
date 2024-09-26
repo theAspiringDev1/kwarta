@@ -1,12 +1,15 @@
-const puppeteer = require('puppeteer');
+import edgeChromium from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer-core';
 
 async function scrapeLogic(res) {
+    const executablePath = await edgeChromium.executablePath;
+
     // Launch the browser
     const browser = await puppeteer.launch({
-        devtools: false,
+        executablePath,
+        args: [...edgeChromium.args, '--no-sandbox'],
         headless: true,
-        defaultViewport: false,
-        args: ['--no-sandbox']
+        ignoreHTTPSErrors: true
     });
     try {
         // Create a page
@@ -39,47 +42,10 @@ async function scrapeLogic(res) {
                 };
             })
         );
-
-        await page.goto('https://edge.pse.com.ph/');
-
-        const indexSummary = await page.evaluate(() =>
-            Array.from(document.querySelectorAll('.index > table:nth-child(2) > tbody:nth-child(3) > tr'), (e) => {
-                return {
-                    label: e.querySelector('td.label').textContent,
-                    price: e.querySelector('td:nth-child(2)').textContent,
-                    priceChange: e.querySelector('td:nth-child(3)').textContent.trim(),
-                    pricePercentage: e.querySelector('td:nth-child(4)').textContent.trim()
-                };
-            })
-        );
-
-        // await page.goto('https://www.pse.com.ph/indices-composition/', { waitUntil: 'domcontentloaded', timeout: 0 });
-        // const element = await page.$('#dropdownMenuButton');
-        // await element.click();
-        // const elementTwo = await page.$('a#pse-diy');
-        // await elementTwo.click();
-        // // await page.click('#dropdownMenuButton');
-        // // await page.click('a#pse-diy');
-
-        // const topDivStocks = await page.evaluate(() =>
-        //     Array.from(document.querySelectorAll('table#data tbody#index-body tr'), (e) => {
-        //         return {
-        //             id: e.querySelector('td.index-count').textContent,
-        //             company: e.querySelector('td.index-name').textContent,
-        //             symbol: e.querySelector('td.index-symbol a').textContent,
-        //             link: e.querySelector('td.index-symbol a').getAttribute('href'),
-        //             price: e.querySelector('td.text-price').textContent,
-        //             shares: e.querySelector('td.text-shares').textContent
-        //         };
-        //     })
-        // );
-
         // Close browser.
         res.status(300).json({
             trendingStocks,
-            marketMovers,
-            indexSummary
-            // topDivStocks
+            marketMovers
         });
     } catch (err) {
         console.error(err);

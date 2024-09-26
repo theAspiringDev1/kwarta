@@ -25,7 +25,7 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
 
 export const DashboardLayout = (props) => {
     const { children } = props;
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const [showTour, setShowTour] = useState(false);
     const handleOpen = () => {
         localStorage.setItem('isTourOpen', true);
@@ -45,7 +45,7 @@ export const DashboardLayout = (props) => {
     const setIsTutorialOpen = useLanguageStore((state) => state.setIsTutorialOpen);
 
     useEffect(() => {
-        console.log({ isTutorialOpen });
+        // console.log({ isTutorialOpen });
         if (transactions.length === 0 && accounts.length === 0) {
             setOpen(true);
         } else {
@@ -118,6 +118,14 @@ export const DashboardLayout = (props) => {
 
         return () => clearInterval(popupInterval);
     }, [showSuggestion, toast, article]);
+
+    useEffect(() => {
+        if (localStorage.getItem('showPopup')) {
+            setShowSuggestion(JSON.parse(localStorage.getItem('showPopup')));
+        } else {
+            localStorage.setItem('showPopup', true);
+        }
+    }, []);
 
     return (
         <AuthGuard>

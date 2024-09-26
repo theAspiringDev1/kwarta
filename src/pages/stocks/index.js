@@ -13,37 +13,10 @@ import DashboardTour from 'components/tours/DashboardTour';
 import { getLanguage } from 'utils/getLanguage';
 import { useLanguageStore } from 'stores/useLanguageStore';
 
-export async function getStaticProps(context) {
-    const res = await fetch(process.env.NEXT_PUBLIC_ENDPOINT + '/stocks');
-    const data = await res.json();
 
-    return {
-        props: {
-            trendingStocksData: data.trendingStocks,
-            marketMoversData: data.marketMovers
-        },
-        revalidate: 10
-        // will be passed to the page component as props
-    };
-}
-
-const Page = ({ trendingStocksData, marketMoversData }) => {
+const Page = () => {
     const router = useRouter();
-    // const [stockData, setStockData] = useState(null);
-    const [trendingStocks, setTrendingStocks] = useState(() => {
-        if (localStorage.getItem('trendingData')) {
-            return JSON.parse(localStorage.getItem('trendingData'));
-        } else {
-            return trendingStocksData;
-        }
-    });
-    const [marketMovers, setMarketMovers] = useState(() => {
-        if (localStorage.getItem('marketData')) {
-            return JSON.parse(localStorage.getItem('marketData'));
-        } else {
-            return marketMoversData;
-        }
-    });
+    const { data: stockData, isError, isLoading } = useStocks();
 
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
     const getTourProgress = useAuthStore((state) => state.getTourProgress);
@@ -87,13 +60,6 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
     useEffect(() => {
         const currentTour = getTourProgress('stocks');
         setShowTour(currentTour.isDone);
-    }, []);
-
-    useEffect(() => {
-        if (trendingStocksData) {
-            localStorage.setItem('trendingData', JSON.stringify(trendingStocksData));
-            localStorage.setItem('marketData', JSON.stringify(marketMoversData));
-        }
     }, []);
 
     return (
@@ -145,7 +111,7 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
                     </Box>
 
                     {/* SUGGESTIONS */}
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} mb={4}>
                         <Grid item xs={12} className='stocks_step_four'>
                             <Tooltip title={getLanguage(currentLanguage).tooltipStocksSuggestion}>
                                 <Typography variant='h4' sx={{ width: 'max-content' }}>
@@ -154,8 +120,8 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
                             </Tooltip>
                         </Grid>
 
-                        {trendingStocks ? (
-                            trendingStocks.map((item, i) => (
+                        {!isLoading && !isError ? (
+                            stockData.trendingStocks.map((item, i) => (
                                 <Grid item xs={12} md={4} key={item.company + '-' + i}>
                                     <Link href={{ pathname: `/stocks/calculate`, query: { ...item } }}>
                                         <Paper sx={{ p: 2, display: 'grid', gap: 2, justifyItems: 'start' }}>
@@ -191,9 +157,30 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
                                     p: 2
                                 }}
                             >
-                                <CircularProgress size={50} />
+                                {!isError ? (
+                                    <CircularProgress size={50} />
+                                ) : (
+                                    <Typography variant='h6' my={4}>
+                                        Error fetching stocks 🥲
+                                    </Typography>
+                                )}
                             </Box>
                         )}
+
+                        <Grid item>
+                            <Typography variant='body1'>
+                                This data is originally from{' '}
+                                <Typography
+                                    variant='body1'
+                                    component='a'
+                                    href='https://ph.investing.com/equities/trending-stocks'
+                                    target='_blank'
+                                >
+                                    ph.investing.com
+                                </Typography>
+                                . Visit their website for more information.
+                            </Typography>
+                        </Grid>
                     </Grid>
                     {/* MARKET MOVERS */}
                     <Grid container spacing={3}>
@@ -205,8 +192,8 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
                             </Tooltip>
                         </Grid>
 
-                        {marketMovers ? (
-                            marketMovers.map((item, i) => (
+                        {!isLoading ? (
+                            stockData.marketMovers.map((item, i) => (
                                 <Grid item xs={12} md={4} key={item.company + '-' + i}>
                                     <Link href={{ pathname: `/stocks/calculate`, query: { ...item } }}>
                                         <Paper sx={{ p: 2, display: 'grid', gap: 2, justifyItems: 'start' }}>
@@ -240,16 +227,22 @@ const Page = ({ trendingStocksData, marketMoversData }) => {
                                 <CircularProgress size={50} />
                             </Box>
                         )}
+
+                        <Grid item xs={12}>
+                            <Typography variant='body1'>
+                                This data is originally from{' '}
+                                <Typography
+                                    variant='body1'
+                                    component='a'
+                                    href='https://ph.investing.com/equities/trending-stocks'
+                                    target='_blank'
+                                >
+                                    ph.investing.com
+                                </Typography>
+                                . Visit their website for more information.
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Box sx={{ pt: 3 }}>
-                        <Typography
-                            sx={{ m: 1, textAlign: 'center' }}
-                            color='textSecondary'
-                            variant='caption'
-                        >
-                            Source: https://www.pseacademy.com.ph/investment-calculator/
-                        </Typography>
-                    </Box>
                 </Container>
             </Box>
         </>

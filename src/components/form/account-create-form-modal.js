@@ -23,6 +23,7 @@ import { getLanguage } from 'utils/getLanguage';
 import { useAccountStore } from 'stores/useAccountStore';
 import { useAuthStore } from 'stores/useAuthStore';
 import { useLanguageStore } from 'stores/useLanguageStore';
+import AccountDropdownType from 'components/shared/AccountDropdownType';
 
 const style = {
     position: 'absolute',
@@ -45,6 +46,7 @@ export default function AccountCreateFormModal({ open, setOpen }) {
     const [selectedColor, setSelectedColor] = useState('');
     const [selectedIcon, setSelectedIcon] = useState('');
     const [showColorWheel, setShowColorWheel] = useState(false);
+    const [accountType, setAccountType] = useState('');
 
     const createAccount = useAccountStore((state) => state.createAccount);
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
@@ -54,7 +56,13 @@ export default function AccountCreateFormModal({ open, setOpen }) {
         accountName: '',
         accountAmount: '',
         accountIcon: '',
-        userId: user?.uid
+        userId: user?.uid,
+        accountDescription: ''
+    };
+
+    const handleAccountTypeChange = (e) => {
+        console.log(e.target.value);
+        setAccountType(e.target.value);
     };
 
     const handleOpenAlert = () => {
@@ -92,13 +100,14 @@ export default function AccountCreateFormModal({ open, setOpen }) {
             account_amount: Number(values.accountAmount),
             account_color: selectedColor,
             account_icon: values.accountIcon,
+            account_description: values.accountDescription,
+            account_type: accountType,
             user_id: values.userId
         });
         formik.resetForm();
         setSelectedIcon('');
         setSelectedColor('');
         toast.dismiss(loader);
-        toast.success('Account successfully created!');
         setOpen(false);
     };
 
@@ -158,7 +167,24 @@ export default function AccountCreateFormModal({ open, setOpen }) {
                                 fullWidth
                             />
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2 }}>
+
+                        <AccountDropdownType handleChange={handleAccountTypeChange} accountType={accountType} />
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginY: 2 }}>
+                            <TextField
+                                id='filled-basic'
+                                label={getLanguage(currentLanguage).accountDescription || 'Account Description'}
+                                variant='filled'
+                                multiline
+                                name='accountDescription'
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.accountDescription}
+                                fullWidth
+                            />
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, marginY: 2 }}>
                             <ColorPickerPanel
                                 colorList={colorCollection}
                                 onColorPress={handleColorClick}

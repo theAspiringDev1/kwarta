@@ -6,11 +6,13 @@ import { useTransactionStore } from 'stores/useTransactionStore';
 import { formatPrice } from 'utils/format-price';
 import { useLanguageStore } from 'stores/useLanguageStore';
 import { teal } from '@mui/material/colors';
+import { useAccountStore } from 'stores/useAccountStore';
 
 export const InvestmentPanel = (props) => {
     const transactions = useTransactionStore((state) => state.transactions);
     const [total, setTotal] = useState(0);
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
+    const accounts = useAccountStore((state) => state.accounts);
 
     useEffect(() => {
         const totalInvestments = transactions.reduce((acc, current) => {
@@ -20,7 +22,14 @@ export const InvestmentPanel = (props) => {
             return acc;
         }, 0);
 
-        setTotal(totalInvestments);
+        const totalInvestmentAccounts = accounts.reduce((acc, current) => {
+            if (current.account_type === 'investments') {
+                acc += current.account_amount;
+            }
+            return acc;
+        }, 0);
+
+        setTotal(totalInvestments + totalInvestmentAccounts);
     }, [transactions]);
 
     return (

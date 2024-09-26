@@ -11,16 +11,25 @@ const accountStore = (set, get) => ({
     setAccounts: (data) => set({ accounts: data }),
     createAccount: async (newAccount) => {
         try {
-            console.log(newAccount);
-
-            await addDoc(collection(db, 'accounts'), {
-                ...newAccount,
-                timestamp: serverTimestamp()
-            });
-
-            console.log('NEW DOCUMENT CREATED');
+            // console.log(newAccount);
+            // console.log(get().accounts.map((account) => account.account_name.toLowerCase()));
+            if (
+                !get()
+                    .accounts.map((account) => account.account_name.toLowerCase())
+                    .includes(newAccount.account_name)
+            ) {
+                await addDoc(collection(db, 'accounts'), {
+                    ...newAccount,
+                    timestamp: serverTimestamp()
+                });
+                toast.success('Account successfully created!');
+                // console.log('NEW DOCUMENT CREATED');
+            } else {
+                throw new Error('Account name is already taken. Think of another account name');
+            }
         } catch (err) {
-            console.log('addAccountError:', err);
+            // console.log('addAccountError:', err);
+            toast.error(err.message);
         }
     },
     updateAccount: async (documentId, updatedAccount) => {

@@ -8,6 +8,7 @@ import {
     FormControl,
     Grid,
     InputLabel,
+    Link,
     ListItemText,
     MenuItem,
     Paper,
@@ -315,6 +316,16 @@ export default function SurveyBlock() {
                                 <Typography variant='h6' mb={4}>
                                     {surveyList[0].question}
                                 </Typography>
+                                <Box mb={2}>
+                                    <Link
+                                        href='https://www.imoney.ph/articles/middle-class-sector-philippines'
+                                        target='_blank'
+                                    >
+                                        <Typography color='textSecondary' variant='caption'>
+                                            Source: IMoney PH{' '}
+                                        </Typography>
+                                    </Link>
+                                </Box>
                                 <FormControl sx={formControlStyle}>
                                     <InputLabel id='demo-simple-select-label'>Choose Answer</InputLabel>
                                     <Select

@@ -21,8 +21,8 @@ export default function useGetUserTransfersSurvey(userID){
                     id: doc.id
                 });
             });
-            
-            console.log(userSurvey);
+
+            // console.log(userSurvey);
             setUserSurvey(userSurvey);
         });
         return unsubscribe;

@@ -24,12 +24,17 @@ const Login = () => {
 
     const handleLoginDefault = (values) => {
         setIsBtnDisabled(true);
+        setIsBtnDisabled(true);
         verifyUser({
             email: values.email,
             password: values.password
-        }).then(() => {
-            setIsBtnDisabled(false);
-        });
+        })
+            .then(() => {
+                setIsBtnDisabled(false);
+            })
+            .then(() => {
+                setIsBtnDisabled(false);
+            });
     };
 
     const handleLoginWithGoogle = () => {

@@ -157,14 +157,17 @@ const transferStore = (set,get) => ({
 
             const receiverAccount = receiverAccountResponse.data();
             const senderAccount = senderAccountResponse.data();
+            
+            if (senderAccount && receiverAccount) {
+                // UPDATE ACCOUNTS
+                await updateDoc(senderAccountRef, {
+                    account_amount: senderAccount.account_amount + currentTransfer.amount
+                });
+                await updateDoc(receiverAccountRef, {
+                    account_amount: receiverAccount.account_amount - currentTransfer.amount
+                });
+            }
 
-            // UPDATE ACCOUNTS
-            await updateDoc(senderAccountRef, {
-                account_amount: senderAccount.account_amount + currentTransfer.amount
-            });
-            await updateDoc(receiverAccountRef, {
-                account_amount: receiverAccount.account_amount - currentTransfer.amount
-            });
 
             // DELETE THE DOCUMENT AND OBJECT
             await deleteDoc(docRef);

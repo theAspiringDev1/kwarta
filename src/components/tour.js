@@ -65,7 +65,7 @@ export default function Tour({ open, handleClose, handleOpen }) {
             target: '.app__carousel',
             content: (
                 <Typography variant='body2'>
-                    Fill the Account Name field (1). Fill the Account Amount field (2).
+                    Fill the Account Name field (1). Fill the Account Amount field (2). Select an Account type (3).
                 </Typography>
             ),
             source: '/static/images/steps/step3.png',
@@ -75,7 +75,7 @@ export default function Tour({ open, handleClose, handleOpen }) {
             target: '.app__carousel',
             content: (
                 <Typography variant='body2'>
-                    Select a Color (1). Select an Icon (2). If all fields are filled, click submit (3).
+                    Fill the Account Description field (1). Select a Color (2). Select an Icon (3). If all fields are filled, click submit (4).
                 </Typography>
             ),
             source: '/static/images/steps/step4.png',
@@ -134,7 +134,9 @@ export default function Tour({ open, handleClose, handleOpen }) {
     const setIsTutorialOpen = useLanguageStore((state) => state.setIsTutorialOpen);
 
     useMount(() => {
-        setState({ run: true });
+        if (open) {
+            setState({ run: true });
+        }
     });
 
     const handleClickReset = () => {

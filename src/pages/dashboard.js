@@ -22,19 +22,8 @@ import DashboardTour from 'components/tours/DashboardTour';
 import { SavingsPanel } from 'components/dashboard/SavingsPanel';
 import { InvestmentPanel } from 'components/dashboard/InvestmentPanel';
 
-export async function getStaticProps(context) {
-    const res = await fetch(process.env.NEXT_PUBLIC_ENDPOINT + `/news`);
 
-    const data = await res.json();
-
-    return {
-        props: {
-            newsdata: data
-        } // will be passed to the page component as props
-    };
-}
-
-const Page = ({ newsdata }) => {
+const Page = () => {
     const user = useAuthStore((state) => state.authState?.user);
     const getTourProgress = useAuthStore((state) => state.getTourProgress);
     const manageTourProgress = useAuthStore((state) => state.manageTourProgress);
@@ -205,7 +194,7 @@ const Page = ({ newsdata }) => {
                             <TransactionHistory sx={{ height: '100%' }} className='dashboard_step_seven' />
                         </Grid>
                         <Grid item lg={8} md={12} xl={9} xs={12}>
-                            <NewsPanel className='dashboard_step_eight' newsData={newsdata} />
+                            <NewsPanel className='dashboard_step_eight' />
                         </Grid>
                     </Grid>
                 </Container>

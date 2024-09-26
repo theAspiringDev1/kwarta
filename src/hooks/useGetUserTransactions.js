@@ -8,10 +8,10 @@ import { useAuthStore } from 'stores/useAuthStore';
 export default function useGetUserTransactions(userID) {
     const setTransactions = useTransactionStore((state) => state.setTransactions);
 
-    const transactionColRef = collection(db, 'transactions');
-    const transactionQuery = query(transactionColRef, where('user_id', '==', userID), orderBy('timestamp', 'desc'));
-
     useEffect(() => {
+        if (!userID) return;
+        const transactionColRef = collection(db, 'transactions');
+        const transactionQuery = query(transactionColRef, where('user_id', '==', userID), orderBy('timestamp', 'desc'));
         const unsubscribe = onSnapshot(transactionQuery, (snapshotData) => {
             const dataList = [];
             const isEmpty = snapshotData.docs.length === 0;

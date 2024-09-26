@@ -8,7 +8,7 @@ import { formatPrice } from 'utils/format-price'
 import { getLanguage } from 'utils/getLanguage';
 import { useLanguageStore } from 'stores/useLanguageStore';
 
-export default function DealsCard({iconName, savings}){
+export default function DealsCard({bankName, iconName, savings}){
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
 
     return (
@@ -25,8 +25,11 @@ export default function DealsCard({iconName, savings}){
             >
                 <CardContent>
                     <Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Icon name={iconName} color='primary' sx={{ fontSize: '100px' }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
+                            <Icon name={iconName} color='primary' sx={{ fontSize: '50px'}} />
+                            <Typography align='center' color='primary' gutterBottom variant='h5' sx={{paddingTop: 2}}>
+                                {bankName}
+                            </Typography>
                         </Box>
                         <Box>
                             <Tooltip title={getLanguage(currentLanguage).tooltipSavingsProductName}>

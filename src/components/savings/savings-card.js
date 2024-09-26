@@ -101,7 +101,7 @@ export const SavingsCard = ({ ...rest }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} mb={4} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {savings.computedBdoSavings?.map((savings) => (
                         <Grid item key={savings.id} xs={12} sm={4} md={4}>
-                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BDO} savings={savings} />
+                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} bankName='BDO'/>
                         </Grid>
                     ))}
                 </Grid>
@@ -119,7 +119,7 @@ export const SavingsCard = ({ ...rest }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} mb={4} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {savings.computedMetrobankSavings?.map((savings) => (
                         <Grid item key={savings.id} xs={12} sm={4} md={4}>
-                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.METROBANK} savings={savings} />
+                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} bankName='Metrobank'/>
                         </Grid>
                     ))}
                 </Grid>
@@ -137,7 +137,7 @@ export const SavingsCard = ({ ...rest }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} mb={4} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {savings.computedBpiSavings?.map((savings) => (
                         <Grid item key={savings.id} xs={12} sm={4} md={4}>
-                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BPI} savings={savings} />
+                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} bankName='BPI'/>
                         </Grid>
                     ))}
                 </Grid>
@@ -155,7 +155,7 @@ export const SavingsCard = ({ ...rest }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} mb={4} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {savings.computedLandbankSavings?.map((savings) => (
                         <Grid item key={savings.id} xs={12} sm={4} md={4}>
-                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} />
+                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} bankName='Landbank'/>
                         </Grid>
                     ))}
                 </Grid>
@@ -173,7 +173,7 @@ export const SavingsCard = ({ ...rest }) => {
                 <Grid container spacing={{ xs: 2, md: 3 }} mb={4} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {savings.computedSecuritybankSavings?.map((savings) => (
                         <Grid item key={savings.id} xs={12} sm={4} md={4}>
-                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.SECURITYBANK} savings={savings} />
+                            <DealsCard iconName={ICON_NAMES.ACCOUNT_ICONS.BANK} savings={savings} bankName='Security Bank'/>
                         </Grid>
                     ))}
                 </Grid>

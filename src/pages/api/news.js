@@ -1,28 +1,33 @@
-const puppeteer = require('puppeteer');
+import edgeChromium from 'chrome-aws-lambda';
+import puppeteer from 'puppeteer-core';
 
 async function scrapeLogic(res) {
     // Launch the browser
-    const browser = await puppeteer.launch({
-        devtools: false,
-        headless: true,
-        defaultViewport: false,
-        args: ['--no-sandbox']
-    });
+    const executablePath = await edgeChromium.executablePath;
+
     try {
+        const browser = await puppeteer.launch({
+            executablePath,
+            args: [...edgeChromium.args, '--no-sandbox'],
+            headless: true,
+            ignoreHTTPSErrors: true
+        });
         // Create a page
         const page = await browser.newPage();
 
-        // Go to your site
-        await page.goto('https://ph.investing.com/news/most-popular-news', { waitUntil: 'load', timeout: 0 });
+        await page.goto('https://ph.investing.com/news/most-popular-news', {
+            timeout: 0,
+            waitUntil: 'load'
+        });
 
         const newsList = await page.evaluate(() =>
             Array.from(document.querySelectorAll('div.largeTitle .articleItem'), (e) => {
                 return {
-                    title: e.querySelector('.textDiv a.title').textContent,
+                    title: e.querySelector('.textDiv a.title').innerHTML,
                     link: 'https://ph.investing.com' + e.querySelector('.textDiv a.title').getAttribute('href'),
                     image: e.querySelector('a.img img').getAttribute('src'),
-                    details: e.querySelector('span.articleDetails .date').textContent,
-                    summary: e.querySelector('.textDiv p').textContent
+                    details: e.querySelector('span.articleDetails .date')?.innerHTML,
+                    summary: e.querySelector('.textDiv p')?.innerHTML
                 };
             })
         );
@@ -33,9 +38,7 @@ async function scrapeLogic(res) {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: err });
-    } finally {
-        // await browser.close();
+        res.status(500).json({ error: err.message });
     }
 }
 

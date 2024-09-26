@@ -22,6 +22,8 @@ const useAccountsListener = (userID) => {
                     account_icon: doc.data().account_icon,
                     account_name: doc.data().account_name,
                     account_amount: doc.data().account_amount,
+                    account_description: doc.data().account_description,
+                    account_type: doc.data().account_type,
                     user_id: userID || '1',
                     id: doc.id,
                     timestamp: doc.data().timestamp?.toDate() || ''

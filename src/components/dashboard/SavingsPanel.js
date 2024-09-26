@@ -6,10 +6,12 @@ import { useTransactionStore } from 'stores/useTransactionStore';
 import { formatPrice } from 'utils/format-price';
 import { useLanguageStore } from 'stores/useLanguageStore';
 import { deepPurple, yellow } from '@mui/material/colors';
+import { useAccountStore } from 'stores/useAccountStore';
 
 export const SavingsPanel = (props) => {
     const transactions = useTransactionStore((state) => state.transactions);
     const [total, setTotal] = useState(0);
+    const accounts = useAccountStore((state) => state.accounts);
     const currentLanguage = useLanguageStore((state) => state.currentLanguage);
 
     useEffect(() => {
@@ -19,8 +21,14 @@ export const SavingsPanel = (props) => {
             }
             return acc;
         }, 0);
+        const totalAccountSavings = accounts.reduce((acc, current) => {
+            if (current.account_type === 'savings' || current.account_type.toLowerCase().includes('savings')) {
+                acc += current.account_amount;
+            }
+            return acc;
+        }, 0);
 
-        setTotal(totalSavings);
+        setTotal(totalSavings + totalAccountSavings);
     }, [transactions]);
 
     return (

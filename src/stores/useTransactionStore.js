@@ -390,6 +390,7 @@ const transactionStore = (set, get) => ({
     },
     getExpenseTypeList: (user_id) => {
         const expenseList = get().transactions.filter((transaction) => transaction.type === 'expense');
+        console.log(expenseList);
 
         const totalSavings = get()
             .transactions.filter((item) => item.type === 'savings')
@@ -427,12 +428,18 @@ const transactionStore = (set, get) => ({
         // add the amount to the initial data
         expenseList.forEach((item) => {
             // find the data
-            const targetCategory = expenseTypeDataList.find(
-                (currentData) => item.category.expense_type === currentData.type
-            );
+            console.log({ item });
+            const targetCategory = expenseTypeDataList.find((currentData) => {
+                console.log({ currentData });
+                if (item.category.expense_type === currentData.type) return currentData;
+            });
 
-            if (item.category.expense_type === targetCategory.type) {
-                targetCategory.amount += item.amount;
+            console.log({ targetCategory });
+
+            if (targetCategory) {
+                if (item.category.expense_type === targetCategory.type) {
+                    targetCategory.amount += item.amount;
+                }
             }
         });
 

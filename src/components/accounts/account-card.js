@@ -13,7 +13,7 @@ import { Icon } from 'components/shared/Icon';
 import { ICON_NAMES } from 'constants/constant';
 
 export const AccountCard = ({ account, ...rest }) => {
-    console.log(account);
+    console.log({ account });
     return (
         <>
             <Card
@@ -35,15 +35,15 @@ export const AccountCard = ({ account, ...rest }) => {
                         <Icon name={account.account_icon} sx={{ fontSize: '100px', color: account.account_color }} />
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', mb: 4 }}>
-                        <Typography align='center' color='textPrimary' gutterBottom variant='h6'>
+                        <Typography color='textPrimary' gutterBottom variant='h6'>
                             {account.account_name}
                         </Typography>
-                        <Typography align='center' color='textPrimary' gutterBottom variant='h6'>
+                        <Typography color='textPrimary' gutterBottom variant='h6'>
                             {formatPrice(account.account_amount)}
                         </Typography>
                     </Box>
                     <Typography align='center' color='textPrimary' variant='body1'>
-                        {account.description}
+                        {account.account_description || 'No Description'}
                     </Typography>
                 </CardContent>
                 <Divider />

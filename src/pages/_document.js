@@ -18,6 +18,7 @@ class CustomDocument extends Document {
                     rel='stylesheet'
                     href='https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto+Slab|Roboto:300,400,500,700&display=optional'
                 />
+                <link rel='manifest' href='/manifest.json' />
                 <link rel='icon' href='/static/icons/favicon.ico' />
                 <meta name='theme-color' content='#111827' />
             </Head>

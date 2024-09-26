@@ -47,15 +47,22 @@ const Page = () => {
                     {transactions.length !== 0 ? (
                         <>
                             <Tooltip title={getLanguage(currentLanguage).tooltipCashflow}>
-                                <Typography variant='h3' sx={{ width: 'max-content' }}>
+                                <Typography variant='h3' sx={{ width: 'max-content', mb: 2 }}>
                                     {getLanguage(currentLanguage).cashflow}
                                 </Typography>
                             </Tooltip>
-                            <Box sx={{ display: { md: 'flex', xs: 'block' }, gap: 2, mb: 2 }}>
-                                <ExpenseTypeChart />
-                                <ExpensesChart />
-                                <IncomeChart />
-                            </Box>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={4}>
+                                    <ExpenseTypeChart />
+                                </Grid>
+                                <Grid item xs={12} md={4}>
+                                    <ExpensesChart />
+                                </Grid>
+
+                                <Grid item xs={12} md={4}>
+                                    <IncomeChart />
+                                </Grid>
+                            </Grid>
                             <Cashflow />
                         </>
                     ) : (
